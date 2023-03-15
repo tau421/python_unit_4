@@ -31,6 +31,12 @@ class Team(db.Model):
         self.team_name = team_name
         self.user_id = user_id
 
+    def get_user(self):
+        return User.query.get(self.user_id)
+    
+    def get_projects(self):
+        return Project.query.filter_by(team_id=self.id).all()
+
 class Project(db.Model):
 
     __tablename__ = "projects"
