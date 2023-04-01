@@ -17,6 +17,14 @@ class User(db.Model):
         self.username = username
         self.password = password
 
+    def get_all_projects(self):
+        projects = []
+
+        for team in self.teams:
+            for project in team.projects:
+                projects.append(project)
+        return projects
+
 class Team(db.Model):
 
     __tablename__ = "teams"
@@ -30,12 +38,6 @@ class Team(db.Model):
     def __init__(self, team_name, user_id):
         self.team_name = team_name
         self.user_id = user_id
-
-    def get_user(self):
-        return User.query.get(self.user_id)
-    
-    def get_projects(self):
-        return Project.query.filter_by(team_id=self.id).all()
 
 class Project(db.Model):
 
@@ -63,5 +65,6 @@ def connect_to_db(app):
 
 if __name__ == "__main__":
     from flask import Flask
+    app = Flask(__name__)
     connect_to_db(app)
     print("Connected to db...")
